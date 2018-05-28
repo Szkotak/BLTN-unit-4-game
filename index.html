@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Star Wars RPG Game</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+
+<body>
+<!-- Starting Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-center">Choose a character to fight! </h4>
+                </div>
+        			<button type="button" class="btn btn-primary block-center" data-dismiss="modal">I'm ready!</button>
+      			</div>
+            </div>
+        </div>
+<div  id='wrap'>
+    <header>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                    <h1> STAR WARS!!</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+   
+   <!-- Battle Zone Area -->
+    <div class="container-fluid gameplaySection">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <!-- Select your champion header -->
+                <h4> Select Your Jedi</h4>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div id="characterList">
+                       <!--  <p> Luke </p>
+                        This is the row where the characters live initially before being chosen and be dynamically placed here
+                        <img src="assets/images/luke.jpg">
+                        <p> 180 </p> -->
+                </div>
+            </div>
+        </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <!-- Select your enemy aligned right header -->
+                <h4> Enemies To Attack</h4>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div id="enemyList">
+                        <!-- This is where your enemies will be dynamically updated after a selection is made in your character-->
+                        <p> Enemy list</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                    <h2> Battle Zone! </h2>
+                </div>
+            </div>
+            <div class="row">
+                <!-- This is the Battle Area -->
+                <div class="col-sm-12 col-md-4 col-lg-4 text-center">
+                    <h2> Your Jedi!</h2>
+                    <div class="col-sm-12 col-md-12 col-lg-12 ">
+                    <!-- When you choose your character this is where it is pushed to -->
+                    	<div id="yourCharacter">
+
+                    <!-- This is where your character will be dynamically updated -->
+                		</div>
+                	</div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4 text-center">
+                   <!-- This is the attack button -->
+                    <button class="waves-effect waves-light btn-danger btn-lg attackBtn text-center" id="attackBtn"> Attack! </button>
+                 
+                </div>
+                <div class="col-sm-12 col-md-4 col-md-4 text-center"> 
+                	<h2> Your Opponent</h2>
+                	<div class="col-sm-12 col-md-12 col-lg-12 ">
+                		 <!-- This is where your chosen enemy will be dynamically updated -->
+                		<div id="yourEnemy">
+                    	</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Houses the attack and game over text -->
+            <div class="row">
+            <div class="col-sm-12 col-md-2 col-lg-2"></div>
+                <div class="col-sm-12 col-md-8 col-lg-8 text-center">
+                                            <!-- This the area where the text gets updated as you play the game -->
+                        <div id="attackText"> </div>
+                        <!-- using this tag to create a button and use it to reset -->
+                        <br>
+                        <div id="gameOver">
+                      <!-- <button> </button>   -->    
+                        </div>
+                </div>
+                 <div class="col-sm-12 col-md-2 col-lg-2"></div>
+            </div>
+    </div>
+
+	<div id="push"> </div>
+</div>
+<div id="footer">
+</div>
+    <script type="text/template" id="characterTmpl">
+		<div class="characterContainer characterClick <%= background %>" data-character-index="<%= index %>">
+			<p><%= character.name %></p>
+			<img src="<%= character.visual %>">
+			<p>HP: <%= character.healthPoints %></p>
+		</div>
+    </script>
+        <script type="text/template" id="attackTmpl">
+		<div class="attackText">
+			You attacked <%= gameObj.currentEnemy ? gameObj.currentEnemy.name : gameObj.lastOpponent.name %> for <%= gameObj.yourCurrentAttackPower %> damange! <br>
+			<% if (gameObj.currentEnemy) { %>
+				<%= gameObj.currentEnemy.name %> counter attacked damaging your health by <%= gameObj.currentEnemy.counterAttackPower %>.  
+			<% } %>
+		</div>
+    </script>
+    <script type="text/template" id="winTmpl">
+		<div class="attackText">
+			You have defeated <%= lastOpponent.name %> , choose another enemy to fight! 
+		</div>
+    </script>
+       <script type="text/template" id="lossTmpl">
+		<div class="attackText">
+			<%= gameObj.currentEnemy.name %>  has defeated you! Game Over!!
+		</div>
+    </script>
+    <script type="text/template" id="jediTmpl">
+        <div class="attackText">
+            You have defeated <%= lastOpponent.name %>!  You are now a true Jedi Master! 
+            <br>
+            May the FORCE be with YOU! 
+        </div>
+    </script>
+
+
+
+    
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="assets/javascript/game.js"></script>
+        <script type="text/javascript" src="assets/javascript/javascript.js"></script>
+        <!-- Created a background with scrolling images -->
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $.backstretch(['assets/images/bg-kylo.jpg', 'assets/images/bg-ship4.jpg', 'assets/images/darth4.jpg','assets/images/plane1.jpg', 'assets/images/plane2.jpg'], {
+                duration: 10000,
+                fade: 900
+            });
+        });
+        </script>
+</body>
+
+</html>
